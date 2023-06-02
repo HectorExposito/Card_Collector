@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="MyReceiver">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Assets/Plugins/Android/MyReceiver.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

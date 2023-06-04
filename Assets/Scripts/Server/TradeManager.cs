@@ -38,7 +38,6 @@ public class TradeManager : MonoBehaviourPun
     const int RARE_PLAYER_VALUE = 5;
     const int ULTRARARE_PLAYER_VALUE = 15;
 
-    float selectedCardsPanelY;
     bool readyToTrade;
     bool friendReadyToTrade;
 
@@ -51,7 +50,6 @@ public class TradeManager : MonoBehaviourPun
 
     private void Start()
     {
-        selectedCardsPanelY = selectedCardsPanel.GetComponent<RectTransform>().sizeDelta.y;
         cardsSelected = new PlayerCards[ULTRARARE_PLAYER_VALUE];
         friendCards = new Card[ULTRARARE_PLAYER_VALUE];
         collectionsDropdown.onValueChanged.AddListener(delegate { ReloadCards(); });
@@ -136,6 +134,7 @@ public class TradeManager : MonoBehaviourPun
         CleanFriendCards();
         readyToTrade = false;
         friendReadyToTrade = false;
+        ChangeTradeButton();
         FindObjectOfType<QuestManager>().UpdateQuests(Quest.QuestType.TRADE);
     }
 

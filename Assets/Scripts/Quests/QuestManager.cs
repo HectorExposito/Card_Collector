@@ -80,6 +80,7 @@ public class QuestManager : MonoBehaviour
             {
                 questText.text = dailyQuests[i].text;
                 rewardText.text = dailyQuests[i].reward.ToString();
+
                 if (dailyQuests[i].completed)
                 {
                     questPanels[i].transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
@@ -89,6 +90,7 @@ public class QuestManager : MonoBehaviour
             {
                 questText.text = weeklyQuests[i % 3].text;
                 rewardText.text = weeklyQuests[i % 3].reward.ToString();
+
                 if (weeklyQuests[i % 3].completed)
                 {
                     questPanels[i].transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
@@ -98,6 +100,7 @@ public class QuestManager : MonoBehaviour
             {
                 questText.text = monthlyQuests[i % 3].text;
                 rewardText.text = monthlyQuests[i % 3].reward.ToString();
+
                 if (monthlyQuests[i % 3].completed)
                 {
                     questPanels[i].transform.GetChild(1).GetChild(2).gameObject.SetActive(true);

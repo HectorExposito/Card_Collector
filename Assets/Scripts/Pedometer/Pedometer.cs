@@ -6,11 +6,20 @@ using TMPro;
 public class Pedometer : MonoBehaviour
 {
     public TMP_Text text;
+    private float lowLimit = 0.005F;
+    private float limit = 0.3F;
+    private bool isHigh = false;
+    private float frequencyHigh = 8.0F;
+    private float currentAcceleration = 0F;
+    private float frequencyLow = 0.2F;
+    private float averageAcceleration;
+    private const int NUMBER_OF_STEPS= 1;
+
     private void Start()
     {
-        if (PlayerPrefs.HasKey("TotalSteps"))
+        if (!PlayerPrefs.HasKey("TotalSteps"))
         {
-            PlayerPrefs.DeleteKey("TotalSteps");
+            PlayerPrefs.SetInt("TotalSteps", 0);
         }
         if (!PlayerPrefs.HasKey("Steps"))
         {
@@ -20,38 +29,26 @@ public class Pedometer : MonoBehaviour
         {
             PlayerPrefs.SetInt("Coins", 10000);
         }
-        else
-        {
-            PlayerPrefs.SetInt("Coins",10000);
-        }
     }
     void Update()
     {
-        stepDetector();
+        StepDetector();
     }
 
-    private float loLim = 0.005F;
-    private float Lim = 0.3F;
-    private int steps = 0;
-    private bool stateH = false;
-    private float fHigh = 8.0F;
-    private float curAcc = 0F;
-    private float fLow = 0.2F;
-    private float avgAcc;
-
     //Se encarga de comprobar si se ha dado un paso
-    public void stepDetector()
+    public void StepDetector()
     {
-        curAcc = Mathf.Lerp(curAcc, Input.acceleration.magnitude, Time.deltaTime * fHigh);
-        avgAcc = Mathf.Lerp(avgAcc, Input.acceleration.magnitude, Time.deltaTime * fLow);
-        float delta = curAcc - avgAcc;
-        if (!stateH)
+        currentAcceleration = Mathf.Lerp(currentAcceleration, Input.acceleration.magnitude, Time.deltaTime * frequencyHigh);
+        averageAcceleration = Mathf.Lerp(averageAcceleration, Input.acceleration.magnitude, Time.deltaTime * frequencyLow);
+        float delta = currentAcceleration - averageAcceleration;
+        if (!isHigh)
         {
-            if (delta > Lim)
+            if (delta > limit)
             {
-                stateH = true;
+                isHigh = true;
                 PlayerPrefs.SetInt("Steps", PlayerPrefs.GetInt("Steps") +1);
-                if (PlayerPrefs.GetInt("Steps") ==10)
+                PlayerPrefs.SetInt("TotalSteps", PlayerPrefs.GetInt("TotalSteps") + 1);
+                if (PlayerPrefs.GetInt("Steps") == NUMBER_OF_STEPS)
                 {
                     PlayerPrefs.SetInt("Coins", PlayerPrefs.GetInt("Coins") + 1);
                     PlayerPrefs.SetInt("Steps", 0);
@@ -63,12 +60,12 @@ public class Pedometer : MonoBehaviour
         }
         else
         {
-            if (delta < loLim)
+            if (delta < lowLimit)
             {
-                stateH = false;
+                isHigh = false;
             }
         }
-        avgAcc = curAcc;
+        averageAcceleration = currentAcceleration;
         text.text = PlayerPrefs.GetInt("Coins").ToString();
 
     }

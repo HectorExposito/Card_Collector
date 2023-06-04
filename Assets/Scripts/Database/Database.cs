@@ -15,8 +15,14 @@ public class Database : MonoBehaviour
     private void StartSync()
     {
         ds = new DataService("cards.db");
-        ds.CreateDB();
-        IEnumerable<Card> cards = ds.GetCardsFromCardTable();
+        if (!PlayerPrefs.HasKey("AlreadyPlayed"))
+        {
+            PlayerPrefs.SetInt("AlreadyPlayed", 1);
+            ds.DeletePlayerCards();
+            ds.CreateDB();
+            IEnumerable<Card> cards = ds.GetCardsFromCardTable();
+        }
+        
     }
 
     //Devuelve todas las cartas de una coleccion
@@ -63,5 +69,10 @@ public class Database : MonoBehaviour
     internal IEnumerable<PlayerCards> GetPlayerCards(string collection, string rarity)
     {
         return ds.GetCardsFromPlayerCardsTable(collection,rarity);
+    }
+
+    internal bool HasPlayerCard(string image)
+    {
+        return ds.HasPlayerCard(image);
     }
 }

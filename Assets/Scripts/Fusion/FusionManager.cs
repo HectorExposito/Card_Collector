@@ -358,7 +358,7 @@ public class FusionManager : MonoBehaviour
         fusionCard.GetComponent<Image>().sprite = active_Back;
 
         db.SaveCardOnPlayerCardsDb(cardObtained);
-        RemoveCardFromPlayerCards();
+        RemoveCardsFromPlayerCards();
 
         playerPoints.text = "0";
         CleanSelectedCards();
@@ -368,7 +368,7 @@ public class FusionManager : MonoBehaviour
         
     }
 
-    private void RemoveCardFromPlayerCards()
+    private void RemoveCardsFromPlayerCards()
     {
         for (int i = 0; i < cardsSelected.Length; i++)
         {

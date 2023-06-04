@@ -28,8 +28,8 @@ public class LobbyManager : MonoBehaviourPunCallbacks
     {
         if (PhotonNetwork.JoinRoom(joinRoomText.text.Trim()))
         {
-            errorMessage.ShowErrorMessage("ERROR AL UNIRSE A LA SALA.\nComrpueba que has introducido correctamente el código." +
-                " También es posible que la sala esté completa");
+            //errorMessage.ShowErrorMessage("ERROR AL UNIRSE A LA SALA.\nComrpueba que has introducido correctamente el código." +
+               // " También es posible que la sala esté completa");
         }
         
     }

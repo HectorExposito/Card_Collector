@@ -69,6 +69,11 @@ public class DataService  {
 
 	}
 
+    internal void DeletePlayerCards()
+    {
+		connection.DeleteAll<PlayerCards>();
+    }
+
     internal IEnumerable<PlayerCards> GetCardsFromPlayerCardsTable(string collection, string rarity)
     {
         if (collection == null)
@@ -127,8 +132,6 @@ public class DataService  {
 	//Crea las tablas y llena la tabla Card
 	public void CreateDB()
 	{
-		//connection.DropTable<Person> ();
-		//connection.CreateTable<Person> ();
 		string query;
 		//Se crea la tabla card y playercards en caso de que no exista
 		connection.CreateTable<Card>();
@@ -236,28 +239,22 @@ public class DataService  {
 			connection.Update(c);
 			Debug.Log("Cantidad despues de insert: " + c.quantity);
 		}
+
+	}
+
+	public bool HasPlayerCard(string cardImage)
+	{
+		PlayerCards playerCard = connection.Table<PlayerCards>().Where(x => x.image == cardImage).FirstOrDefault();
+        if (playerCard.quantity-1 >= 1)
+        {
+			Debug.Log(" CARTA TRUE");
+			return true;
+        }
+        else
+        {
+			Debug.Log("CARTA FALSE");
+			return false;
+		}
 		
 	}
-
-	/*public IEnumerable<Person> GetPersons(){
-		return connection.Table<Person>();
-	}
-
-	public IEnumerable<Person> GetPersonsNamedRoberto(){
-		return connection.Table<Person>().Where(x => x.Name == "Roberto");
-	}
-
-	public Person GetJohnny(){
-		return connection.Table<Person>().Where(x => x.Name == "Johnny").FirstOrDefault();
-	}
-
-	public Person CreatePerson(){
-		var p = new Person{
-				Name = "Johnny",
-				Surname = "Mnemonic",
-				Age = 21
-		};
-		connection.Insert (p);
-		return p;
-	}*/
 }

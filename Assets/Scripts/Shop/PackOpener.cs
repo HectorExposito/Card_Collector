@@ -11,7 +11,9 @@ public class PackOpener : MonoBehaviour
     [SerializeField] GameObject pokemon;
     [SerializeField] GameObject onePiece;
     [SerializeField] Image card;
-    [SerializeField] TMP_Text text;
+    [SerializeField] TMP_Text rarityText;
+    [SerializeField] TMP_Text newCardText;
+    [SerializeField] Database db;
     Card[] cards;
     int numOfCards;
     int counter;
@@ -26,9 +28,10 @@ public class PackOpener : MonoBehaviour
         this.cards = cards;
         numOfCards = cards.Length;
         counter = 0;
-        //Se desactivan los objetos carta y texto
+        //Se desactivan los objetos carta y textos
         card.gameObject.SetActive(false);
-        text.gameObject.SetActive(false);
+        rarityText.gameObject.SetActive(false);
+        newCardText.gameObject.SetActive(false);
         //En base a la coleccion se activa el dorso correspondiente
         switch (collection)
         {
@@ -70,8 +73,18 @@ public class PackOpener : MonoBehaviour
             string cardPath = cards[counter].image.Replace(".jpg", "").Replace(".\\Assets\\Resources\\", "");
             card.sprite = Resources.Load<Sprite>(cardPath);
             card.gameObject.SetActive(true);
+            
             ChangeRarityText(cards[counter].rarity);
-            text.gameObject.SetActive(true);
+            rarityText.gameObject.SetActive(true);
+
+            if (db.HasPlayerCard(cards[counter].image))
+            {
+                newCardText.gameObject.SetActive(false);
+            }
+            else
+            {
+                newCardText.gameObject.SetActive(true);
+            }
         }
         //Carga la imagen y el texto de la siguiente carta
         else if (counter < numOfCards)
@@ -79,6 +92,15 @@ public class PackOpener : MonoBehaviour
             string cardPath = cards[counter].image.Replace(".jpg", "").Replace(".\\Assets\\Resources\\", "");
             card.sprite = Resources.Load<Sprite>(cardPath);
             ChangeRarityText(cards[counter].rarity);
+
+            if (db.HasPlayerCard(cards[counter].image))
+            {
+                newCardText.gameObject.SetActive(false);
+            }
+            else
+            {
+                newCardText.gameObject.SetActive(true);
+            }
         }
         //Si el contador es igual al numero de cartas se desactiva el panel y se pone en null el array cards
         else
@@ -95,20 +117,20 @@ public class PackOpener : MonoBehaviour
         switch (rarity)
         {
             case CardInfo.common:
-                text.text = "COMUN";
-                text.color = Color.white;
+                rarityText.text = "COMUN";
+                rarityText.color = Color.white;
                 break;
             case CardInfo.uncommon:
-                text.text = "POCO COMUN";
-                text.color = Color.green;
+                rarityText.text = "POCO COMUN";
+                rarityText.color = Color.green;
                 break;
             case CardInfo.rare:
-                text.text = "RARA";
-                text.color = Color.blue;
+                rarityText.text = "RARA";
+                rarityText.color = Color.blue;
                 break;
             case CardInfo.ultrarare:
-                text.text = "ULTRA RARA";
-                text.color = new Color32(147, 112, 219,255);
+                rarityText.text = "ULTRA RARA";
+                rarityText.color = new Color32(147, 112, 219,255);
                 break;
         }
     }

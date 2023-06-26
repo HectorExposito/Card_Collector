@@ -7,9 +7,9 @@ public class Quest
     private QuestDifficulty difficulty;
     public QuestType type;
     private QuestTime time;
-    int quantity;
+    public int quantity;
     public int reward;
-    int actualQuantity;
+    public int actualQuantity;
     public bool completed;
     
 

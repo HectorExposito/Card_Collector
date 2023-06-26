@@ -21,6 +21,7 @@ public class FusionManager : MonoBehaviour
     float selectedCardOriginalHeight;
 
     [SerializeField] TMP_Text playerPoints;
+    [SerializeField] GameObject newCardText;
 
     PlayerCards[] cardsSelected;
     Card cardObtained;
@@ -443,12 +444,17 @@ public class FusionManager : MonoBehaviour
             string cardPath = cardObtained.image.Replace(".jpg", "").Replace(".\\Assets\\Resources\\", "");
             fusionCard.GetComponent<Image>().sprite= Resources.Load<Sprite>(cardPath);
             numberOfClicks++;
+            if (!db.HasPlayerCard(cardObtained.image))
+            {
+                newCardText.SetActive(true);
+            }
         }
         else
         {
             numberOfClicks = 0;
             fusionCardPanel.SetActive(false);
             FindObjectOfType<QuestManager>().UpdateQuests(Quest.QuestType.FUSION);
+            newCardText.SetActive(false);
         }
     }
 

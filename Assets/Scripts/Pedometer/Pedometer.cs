@@ -1,5 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
+
 using UnityEngine;
 using TMPro;
 
@@ -12,11 +11,12 @@ public class Pedometer : MonoBehaviour
     private float frequencyHigh = 8.0F;
     private float currentAcceleration = 0F;
     private float frequencyLow = 0.2F;
-    private float averageAcceleration;
+    private float previousAcceleration;
     private const int NUMBER_OF_STEPS= 1;
 
     private void Start()
     {
+        
         if (!PlayerPrefs.HasKey("TotalSteps"))
         {
             PlayerPrefs.SetInt("TotalSteps", 0);
@@ -39,8 +39,8 @@ public class Pedometer : MonoBehaviour
     public void StepDetector()
     {
         currentAcceleration = Mathf.Lerp(currentAcceleration, Input.acceleration.magnitude, Time.deltaTime * frequencyHigh);
-        averageAcceleration = Mathf.Lerp(averageAcceleration, Input.acceleration.magnitude, Time.deltaTime * frequencyLow);
-        float delta = currentAcceleration - averageAcceleration;
+        previousAcceleration = Mathf.Lerp(previousAcceleration, Input.acceleration.magnitude, Time.deltaTime * frequencyLow);
+        float delta = currentAcceleration - previousAcceleration;
         if (!isHigh)
         {
             if (delta > limit)
@@ -65,7 +65,7 @@ public class Pedometer : MonoBehaviour
                 isHigh = false;
             }
         }
-        averageAcceleration = currentAcceleration;
+        previousAcceleration = currentAcceleration;
         text.text = PlayerPrefs.GetInt("Coins").ToString();
 
     }

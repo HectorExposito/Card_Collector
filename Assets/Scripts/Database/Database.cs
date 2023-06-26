@@ -15,6 +15,13 @@ public class Database : MonoBehaviour
     private void StartSync()
     {
         ds = new DataService("cards.db");
+        //if (!PlayerPrefs.HasKey("Borrar2"))
+        //{
+        //    PlayerPrefs.SetString("Borrar2", "");
+        //    ds.DeletePlayerCards();
+        //    ds.CreateDB();
+        //    IEnumerable<Card> cards = ds.GetCardsFromCardTable();
+        //}
         if (!PlayerPrefs.HasKey("AlreadyPlayed"))
         {
             PlayerPrefs.SetInt("AlreadyPlayed", 1);

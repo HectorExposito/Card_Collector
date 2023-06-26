@@ -16,9 +16,12 @@ public class QuestManager : MonoBehaviour
     private Quest[] monthlyQuests=new Quest[NUMBER_OF_QUESTS];
 
     [SerializeField]private GameObject[] questPanels;
+    [SerializeField] private GameObject progressPanel;
+    [SerializeField] private TMP_Text progressText;
 
     private string todaysDate;
     private const string MONDAY="Monday";
+
     private void Awake()
     {
         LoadFiles();
@@ -75,12 +78,15 @@ public class QuestManager : MonoBehaviour
         for (int i = 0; i < questPanels.Length; i++)
         {
             TMP_Text questText=questPanels[i].transform.GetChild(0).GetComponent<TMP_Text>();
-            TMP_Text rewardText= questPanels[i].transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>(); ;
+            TMP_Text rewardText= questPanels[i].transform.GetChild(1).GetChild(1).GetComponent<TMP_Text>();
+
             if (i < 3)
             {
                 questText.text = dailyQuests[i].text;
                 rewardText.text = dailyQuests[i].reward.ToString();
 
+                Quest q = dailyQuests[i];
+                questPanels[i].GetComponent<Button>().onClick.AddListener(delegate { OpenProgressPanel(q); });
                 if (dailyQuests[i].completed)
                 {
                     questPanels[i].transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
@@ -91,6 +97,8 @@ public class QuestManager : MonoBehaviour
                 questText.text = weeklyQuests[i % 3].text;
                 rewardText.text = weeklyQuests[i % 3].reward.ToString();
 
+                Quest q = weeklyQuests[i % 3];
+                questPanels[i].GetComponent<Button>().onClick.AddListener(delegate { OpenProgressPanel(q); });
                 if (weeklyQuests[i % 3].completed)
                 {
                     questPanels[i].transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
@@ -101,6 +109,8 @@ public class QuestManager : MonoBehaviour
                 questText.text = monthlyQuests[i % 3].text;
                 rewardText.text = monthlyQuests[i % 3].reward.ToString();
 
+                Quest q = monthlyQuests[i % 3];
+                questPanels[i].GetComponent<Button>().onClick.AddListener(delegate { OpenProgressPanel(q); });
                 if (monthlyQuests[i % 3].completed)
                 {
                     questPanels[i].transform.GetChild(1).GetChild(2).gameObject.SetActive(true);
@@ -369,5 +379,34 @@ public class QuestManager : MonoBehaviour
             }
             numQuest++;
         }
+    }
+
+    public void OpenProgressPanel(Quest quest)
+    {
+        progressPanel.SetActive(true);
+        SetProgressText(quest);
+    }
+
+    private void SetProgressText(Quest quest)
+    {
+        switch (quest.type)
+        {
+            case Quest.QuestType.TRADE:
+                progressText.text = "INTERCAMBIOS REALIZADOS:\n";
+                break;
+            case Quest.QuestType.CARD:
+                progressText.text = "CARTAS RARAS O ULTRA RARAS OBTENIDAS:\n";
+                break;
+            case Quest.QuestType.FUSION:
+                progressText.text = "FUSIONES REALIZADAS:\n";
+                break;
+            case Quest.QuestType.PACK:
+                progressText.text = "SOBRES ABIERTOS:\n";
+                break;
+            case Quest.QuestType.STEPS:
+                progressText.text = "PASOS CAMINADOS:\n";
+                break;
+        }
+        progressText.text += quest.actualQuantity + "/" + quest.quantity;
     }
 }
